@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { TodoBox } from "./components/todobox";
+import * as React from "react";
+import { TodoContext } from "./utils/todoprovider";
 
 function App() {
+  const [todos, , activeTodos] = React.useContext(TodoContext);
+  if (!localStorage.getItem("todoState")) {
+    localStorage.setItem("todoState", "all");
+  }
+  const [todoState, setTodostate] = React.useState(() => {
+    const initialState = localStorage.getItem("todoState");
+    return initialState;
+  });
+  React.useEffect(() => {
+    localStorage.setItem("todoList", JSON.stringify(todos));
+  }, [todos]);
+  React.useEffect(() => {
+    localStorage.setItem("todoState", todoState);
+  }, [todoState]);
+  React.useEffect(() => {
+    localStorage.setItem("activeTodos", JSON.stringify(activeTodos));
+  }, [activeTodos]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>todos</h1>
+      <TodoBox todoState={todoState} setTodoState={setTodostate}></TodoBox>
     </div>
   );
 }
 
-export default App;
+export { App };
