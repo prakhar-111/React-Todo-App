@@ -39,15 +39,14 @@ function Todo({ todo, todoState }) {
     // setTodos(modifiedTodos);
   }
   function handleCheck(event) {
-    let modifiedTodos = todos.map(function (element) {
+    console.log(event.target.checked);
+    let index = todos.findIndex(function (element) {
       if (element.id === todo.id) {
-        return {
-          ...element,
-          isCompleted: event.target.checked,
-        };
+        return true;
       }
-      return element;
     });
+    let modifiedTodos = [...todos];
+    modifiedTodos[index].isCompleted = !todos[index].isCompleted;
     setTodos(modifiedTodos);
     if (event.target.checked) {
       setActiveTodos((prevCount) => prevCount - 1);
@@ -73,7 +72,12 @@ function Todo({ todo, todoState }) {
         <div className={todo.isCompleted ? "tickSpan" : "incompleteTickSpan"}>
           ✓
         </div>
-        <input type={"checkbox"} check-id={todo.id} onClick={handleCheck} />
+        <input
+          type={"checkbox"}
+          check-id={todo.id}
+          onClick={handleCheck}
+          checked={todo.isCompleted}
+        />
       </label>
       <input
         input-id={todo.id}
